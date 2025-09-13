@@ -1,0 +1,24 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# SQLite database
+db.sqlite3
+
+# Pipenv
+Pipfile.lock
+
+# Virtual Environment (sometimes pipenv uses .venv folder)
+.venv/
+venv/
+
+# VSCode settings
+.vscode/
+
+# Logs
+*.log
+
+# Media / uploaded files
+/media/
