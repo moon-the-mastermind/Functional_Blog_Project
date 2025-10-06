@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Django Projects Blog{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Delayed gradient animations using the same class name */
+  .gradient-animate.nav-delay {
+    animation-delay: 0s;
+  }
+  
+  .gradient-animate.hero-delay {
+    animation-delay: 5s;
+  }
+  
+  .gradient-animate.newsletter-delay {
+    animation-delay: 10s;
+  }
+  
+  .gradient-animate.placeholder-delay {
+    animation-delay: 2.5s;
+  }
+
+  .text-shadow {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section with 5-second delay -->
+<section class="gradient-animate hero-delay text-white py-16">
+  <div class="max-w-7xl mx-auto px-4 text-center">
+    <h1 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Thoughts. Stories. Ideas</h1>
+    <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-shadow">
+      Dive into my Django projects, tutorials, and coding adventures
+    </p>
+    <a href="{% url 'create_post' %}" class="bg-white text-gray-800 hover:bg-gray-100 font-bold py-3 px-6 rounded-full transition duration-300 shadow-lg">
+      Create a New Post
+    </a>
+  </div>
+</section>
+
+<!-- Featured Posts Section -->
+<section id="featured-posts" class="py-12 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Featured Projects</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for post in posts %}
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-48 object-cover">
+        {% else %}
+        <div class="w-full h-48 gradient-animate placeholder-delay flex items-center justify-center">
+          <span class="text-white text-lg font-semibold text-shadow">Django Project</span>
+        </div>
+        {% endif %}
+        
+        <div class="p-6">
+          <div class="flex items-center mb-4">
+            <span class="bg-gradient-to-r from-pink-500 to-red-500 text-white text-xs font-medium px-2.5 py-0.5 rounded-full">
+              {{ post.category.name|default:"Django" }}
+            </span>
+            <span class="text-gray-500 text-sm ml-4">{{ post.published_date|date:"M d, Y" }}</span>
+          </div>
+          
+          <h3 class="text-xl font-bold mb-3 text-gray-800 hover:text-pink-600 transition duration-300">
+            <a href="{% url 'post_details' post.slug %}">{{ post.title }}</a>
+          </h3>
+          
+          <p class="text-gray-600 mb-4">{{ post.excerpt|truncatewords:20 }}</p>
+          
+          <div class="flex items-center justify-between">
+            <a href="{% url 'post_details' post.slug %}" class="text-pink-600 hover:text-pink-800 font-medium flex items-center">
+              Read More
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </a>
+            
+            <div class="flex items-center">
+              <svg class="w-4 h-4 text-gray-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+              <span class="text-gray-500 text-sm">{{ post.view_count }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-span-full text-center py-12">
+        <p class="text-gray-500 text-lg">No featured posts available.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- All Posts Section -->
+<section class="py-12 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-800">All Projects</h2>
+      
+      <div class="mt-4 md:mt-0">
+        <select id="category-filter" class="bg-white border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-pink-500">
+          <option value="all">All Categories</option>
+          {% for category in categories %}
+          <option value="{{ category.id }}">{{ category.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for post in user_post %}
+      <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300 post-item" data-category="{{ post.category.id|default:'all' }}">
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-40 object-cover">
+        {% else %}
+        <div class="w-full h-40 gradient-animate placeholder-delay flex items-center justify-center">
+          <span class="text-white font-semibold text-shadow">Django</span>
+        </div>
+        {% endif %}
+        
+        <div class="p-6">
+          <div class="flex items-center mb-3">
+            <span class="bg-gradient-to-r from-green-400 to-blue-500 text-white text-xs font-medium px-2.5 py-0.5 rounded-full">
+              {{ post.category.name|default:"Django" }}
+            </span>
+            <span class="text-gray-500 text-sm ml-4">{{ post.created_at|date:"M d, Y" }}</span>
+          </div>
+          
+          <h3 class="text-lg font-bold mb-2 text-gray-800 hover:text-pink-600 transition duration-300">
+            <a href="{% url 'post_details' post.slug %}">{{ post.title }}</a>
+          </h3>
+          
+          <p class="text-gray-600 text-sm mb-4">{{ post.excerpt|truncatewords:15 }}</p>
+          
+          <div class="flex items-center justify-between">
+            <a href="{% url 'post_details' post.slug %}" class="text-pink-600 hover:text-pink-800 text-sm font-medium">
+              Read More →
+            </a>
+            
+            <div class="flex items-center">
+              <svg class="w-4 h-4 text-gray-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+              <span class="text-gray-500 text-xs">{{ post.view_count }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-span-full text-center py-12">
+        <p class="text-gray-500 text-lg">No posts available.</p>
+      </div>
+      {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="flex justify-center mt-12">
+      <nav class="inline-flex rounded-md shadow">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="py-2 px-4 border border-gray-300 bg-white text-pink-600 hover:bg-gray-50 rounded-l-md">
+          Previous
+        </a>
+        {% else %}
+        <span class="py-2 px-4 border border-gray-300 bg-gray-100 text-gray-400 rounded-l-md">Previous</span>
+        {% endif %}
+        
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+          <span class="py-2 px-4 border border-gray-300 bg-gradient-to-r from-pink-500 to-red-500 text-white">{{ num }}</span>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a href="?page={{ num }}" class="py-2 px-4 border border-gray-300 bg-white text-pink-600 hover:bg-gray-50">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="py-2 px-4 border border-gray-300 bg-white text-pink-600 hover:bg-gray-50 rounded-r-md">
+          Next
+        </a>
+        {% else %}
+        <span class="py-2 px-4 border border-gray-300 bg-gray-100 text-gray-400 rounded-r-md">Next</span>
+        {% endif %}
+      </nav>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Newsletter Section with 10-second delay -->
+<section class="gradient-animate newsletter-delay py-12 text-white">
+  <div class="max-w-7xl mx-auto px-4 text-center">
+    <h2 class="text-3xl font-bold mb-4 text-shadow">Stay Updated</h2>
+    <p class="text-xl mb-8 max-w-2xl mx-auto text-shadow">
+      Get notified when I publish new Django projects and tutorials
+    </p>
+    
+    <form class="max-w-md mx-auto flex">
+      <input type="email" placeholder="Your email address" class="flex-grow py-3 px-4 rounded-l-full focus:outline-none text-gray-800">
+      <button type="submit" class="bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-6 rounded-r-full transition duration-300 text-shadow">
+        Subscribe
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Category filtering functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const categoryFilter = document.getElementById('category-filter');
+    
+    if (categoryFilter) {
+      categoryFilter.addEventListener('change', function() {
+        const selectedCategory = this.value;
+        const posts = document.querySelectorAll('.post-item');
+        
+        posts.forEach(post => {
+          if (selectedCategory === 'all' || post.getAttribute('data-category') === selectedCategory) {
+            post.style.display = 'block';
+          } else {
+            post.style.display = 'none';
+          }
+        });
+      });
+    }
+  });
+</script>
+{% endblock %}

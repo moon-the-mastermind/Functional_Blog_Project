@@ -1,0 +1,415 @@
+{% extends 'base.html' %} {% load static %} {% block title %} {{ post_data.title }} - Django Projects Blogger {% endblock %}
+ {% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <!-- Breadcrumb -->
+  <nav class="flex mb-8" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+      <li class="inline-flex items-center">
+        <a
+          href="{% url 'home' %}"
+          class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600"
+        >
+          <i class="fas fa-home mr-2"></i>
+          Home
+        </a>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+          <a
+            href="{% url 'view_post' %}"
+            class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2"
+            >Posts</a
+          >
+        </div>
+      </li>
+      <li aria-current="page">
+        <div class="flex items-center">
+          <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+          <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2"
+            >{{ post_data.title|truncatewords:5 }}</span
+          >
+        </div>
+      </li>
+    </ol>
+  </nav>
+
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <!-- Main Content -->
+    <div class="lg:col-span-3">
+      <!-- Post Header -->
+      <article class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+        {% if post_data.image %}
+        <img
+          src="{{ post_data.image }}"
+          alt="{{ post_data.title }}"
+          class="w-full h-64 md:h-96 object-cover"
+        />
+        {% else %}
+        <div
+          class="w-full h-64 md:h-96 gradient-animate flex items-center justify-center"
+        >
+          <span class="text-white text-2xl font-semibold text-shadow"
+            >Django Project</span
+          >
+        </div>
+        {% endif %}
+
+        <div class="p-6 md:p-8">
+          <!-- Post Meta -->
+          <div class="flex flex-wrap items-center gap-4 mb-6">
+            <span
+              class="bg-gradient-to-r from-pink-500 to-red-500 text-white text-sm font-medium px-3 py-1 rounded-full"
+            >
+              {{ post_data.category|default:"Django" }}
+            </span>
+            <div class="flex items-center text-gray-600">
+              <i class="fas fa-user-circle mr-2"></i>
+              <span class="text-sm">{{ post_data.created_by.username }}</span>
+            </div>
+            <div class="flex items-center text-gray-600">
+              <i class="fas fa-calendar-alt mr-2"></i>
+              <span class="text-sm"
+                >{{ post_data.created_at|date:"F d, Y" }}</span
+              >
+            </div>
+            <div class="flex items-center text-gray-600">
+              <i class="fas fa-clock mr-2"></i>
+              <span class="text-sm"
+                >{{ post_data.created_at|timesince }} ago</span
+              >
+            </div>
+          </div>
+
+          <!-- Post Title -->
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+            {{ post_data.title }}
+          </h1>
+
+          <!-- Tags -->
+          {% if post_data.tags %}
+          <div class="flex flex-wrap gap-2 mb-6">
+            {% for tag in post_data.tags %}
+            <span
+              class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded border"
+            >
+              #{{ tag }}
+            </span>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <!-- Post Content -->
+          <div
+            class="prose max-w-none prose-lg prose-headings:text-gray-800 prose-p:text-gray-600 prose-li:text-gray-600 prose-strong:text-gray-800 prose-code:text-pink-600 prose-pre:bg-gray-800 prose-blockquote:border-pink-500 prose-blockquote:text-gray-600 mb-8"
+          >
+            {{ post_data.body|linebreaks }}
+          </div>
+
+          <!-- Post Footer -->
+          <div
+            class="flex flex-wrap justify-between items-center pt-6 border-t border-gray-200"
+          >
+            <div class="flex items-center text-gray-600 mb-4 md:mb-0 space-x-4">
+              {% if liked %}
+              <a
+                href="{% url 'liked_post' post_data.slug %}"
+                class="flex items-center space-x-2 px-3 py-1 border border-red-500 text-red-600 rounded-full hover:bg-red-50 transition"
+              >
+                <i class="fas fa-heart"></i>
+                <span>Liked</span>
+              </a>
+              {% else %}
+              <a
+                href="{% url 'liked_post' post_data.slug %}"
+                class="flex items-center space-x-2 px-3 py-1 border border-gray-400 text-gray-600 rounded-full hover:border-red-500 hover:text-red-600 transition"
+              >
+                <i class="far fa-heart"></i>
+                <span>Like</span>
+              </a>
+              {% endif %}
+
+              <span class="flex items-center text-gray-600 text-sm">
+                <i class="fa fa-eye mr-1"></i>
+                {{ post_data.views }} views
+              </span>
+              <i class="fas fa-edit mr-2"></i>
+              <span class="text-sm"
+                >Last updated: {{ post_data.updated_at|date:"F d, Y" }}</span
+              >
+            </div>
+            <div class="flex space-x-4">
+              {% if request.user.username == post_data.created_by.username %}
+              <a
+                href="{% url 'edit_post' post_data.slug %}"
+                class="flex items-center text-green-600 hover:text-pink-600 transition duration-300"
+              >
+                <i class="fas fa-edit mr-2"></i>
+                Edit
+              </a>
+              <a
+                href="{% url 'delete_post' post_data.slug %}"
+                class="flex items-center text-red-600 hover:text-pink-600 transition duration-300"
+              >
+                <i class="fas fa-trash mr-2"></i>
+                Delete
+              </a>
+              {% else %}
+              <button
+                class="flex items-center text-gray-600 hover:text-red-600 transition duration-300"
+              >
+                <i class="fas fa-flag mr-2"></i>
+                Report
+              </button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Comments Section -->
+      <section id="comments" class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-comments mr-3 text-pink-500"></i>
+          Comments ({{ comments|length }})
+        </h2>
+
+        {% if comments %}
+        <div class="space-y-6 mb-8">
+          {% for comment in comments %}
+          <div
+            class="border-l-4 border-pink-500 pl-4 py-2 bg-gray-50 rounded-r-lg"
+          >
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center">
+                <i class="fas fa-user-circle text-gray-400 mr-2"></i>
+                <span class="font-semibold text-gray-800"
+                  >{{ comment.commented_by }}</span
+                >
+              </div>
+              <span class="text-sm text-gray-500"
+                >{{ comment.commented_at|date:"M d, Y" }}</span
+              >
+            </div>
+            <div class="flex justify-between items-center">
+              <p class="text-gray-600">{{ comment.body }}</p>
+              {% if request.user == comment.commented_by %}
+
+              <a
+                href="{% url 'edit_comment' post_data.slug comment.id %}"
+                class="text-xs text-pink-500 hover:underline ml-4 flex items-center"
+              >
+                <i class="fas fa-edit mr-1"></i> Edit
+              </a>
+
+              {% endif %}
+            </div>
+            {% if comment.updated_at != comment.commented_at %}
+            <p class="text-xs text-gray-400 mt-1">
+              Edited: {{ comment.updated_at|date:"M d, Y" }}
+            </p>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-8">
+          <i class="fas fa-comment-slash text-4xl text-gray-300 mb-4"></i>
+          <p class="text-gray-500">No comments yet. Be the first to comment!</p>
+        </div>
+        {% endif %}
+
+        <!-- Add Comment Form -->
+        {% if user.is_authenticated %}
+        <div class="bg-gray-50 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-gray-800 mb-4">
+            Add a Comment
+          </h3>
+          <form method="POST" enctype="multipart/form-data" class="space-y-5">
+            {% csrf_token %} {% for field in form %}
+            <div>
+              <label
+                for="{{ field.id_for_label }}"
+                class="block mb-2 text-sm font-medium text-gray-700"
+              >
+                <!-- {{ field.label }} -->
+              </label>
+              {{ field }} {% if field.errors %}
+              <p class="mt-1 text-sm text-red-500">{{ field.errors.0 }}</p>
+              {% endif %}
+            </div>
+            {% endfor %}
+
+            <button
+              type="submit"
+              class="w-full py-2 px-4 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+            >
+              Publish Comment
+            </button>
+          </form>
+        </div>
+        {% else %}
+        <div
+          class="bg-gradient-to-r from-pink-50 to-red-50 border border-pink-200 rounded-lg p-6 text-center"
+        >
+          <i class="fas fa-sign-in-alt text-2xl text-pink-500 mb-3"></i>
+          <p class="text-gray-700 mb-4">Please log in to leave a comment.</p>
+          <a
+            href="{% url 'user_login' %}"
+            class="bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white font-semibold py-2 px-6 rounded-lg transition duration-300"
+          >
+            Login to Comment
+          </a>
+        </div>
+        {% endif %}
+      </section>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="lg:col-span-1">
+      <!-- Author Info -->
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+          <i class="fas fa-user-edit mr-2 text-pink-500"></i>
+          About Author
+        </h3>
+        <div class="text-center">
+          <div
+            class="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-3"
+          >
+            <span class="text-white font-semibold text-lg"
+              >{{ post_data.created_by.name|first|upper }}</span
+            >
+          </div>
+          <h4 class="font-semibold text-gray-800">
+            <a href="{% url 'view_profile' post_data.created_by.id %}"
+              >{{ post_data.created_by.name }}</a
+            >
+          </h4>
+          <p class="text-sm text-gray-600 mt-2">
+            @{{ post_data.created_by.username }}
+          </p>
+          <p class="text-sm text-gray-600 mt-2">
+            {{ post_data.created_by.bio }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Related Posts -->
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+          <i class="fas fa-link mr-2 text-pink-500"></i>
+          Related Posts
+        </h3>
+        <div class="space-y-4">
+          {% for post in related_post_data %}
+          <a
+            href="{% url 'post_details' post.slug %}"
+            class="block p-3 border border-gray-200 rounded-lg hover:border-pink-300 hover:bg-pink-50 transition duration-300"
+          >
+            <h4 class="font-semibold text-gray-800 text-sm mb-1">
+              {{ post.title }}
+            </h4>
+            <p class="text-xs text-gray-600">
+              {{ post.body|truncatewords:20 }}
+            </p>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Table of Contents -->
+      <div class="bg-white rounded-xl shadow-lg p-6 sticky top-24">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+          <i class="fas fa-list mr-2 text-pink-500"></i>
+          Table of Contents
+        </h3>
+        <nav class="space-y-2">
+          <a
+            href="#comments"
+            class="block text-sm text-gray-600 hover:text-pink-600 transition duration-300 py-1 border-l-2 border-transparent hover:border-pink-500 hover:pl-2"
+          >
+            <i class="fas fa-comments mr-2"></i>
+            Comments
+          </a>
+          <a
+            href="#featured-posts"
+            class="block text-sm text-gray-600 hover:text-pink-600 transition duration-300 py-1 border-l-2 border-transparent hover:border-pink-500 hover:pl-2"
+          >
+            <i class="fas fa-star mr-2"></i>
+            Featured Posts
+          </a>
+          <a
+            href="#"
+            class="block text-sm text-gray-600 hover:text-pink-600 transition duration-300 py-1 border-l-2 border-transparent hover:border-pink-500 hover:pl-2"
+          >
+            <i class="fas fa-project-diagram mr-2"></i>
+            More Projects
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  // Share post functionality
+  function sharePost() {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "{{ post_data.title }}",
+          text: "Check out this Django project!",
+          url: window.location.href,
+        })
+        .then(() => console.log("Successful share"))
+        .catch((error) => console.log("Error sharing:", error));
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      navigator.clipboard.writeText(window.location.href);
+      alert("Link copied to clipboard!");
+    }
+  }
+
+  // Bookmark post functionality
+  function bookmarkPost() {
+    // Add to localStorage for demo purposes
+    const bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
+    const post = {
+      title: "{{ post_data.title }}",
+      url: window.location.href,
+      date: new Date().toISOString(),
+    };
+
+    if (!bookmarks.find((b) => b.url === post.url)) {
+      bookmarks.push(post);
+      localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+      alert("Post saved to bookmarks!");
+    } else {
+      alert("Post already bookmarked!");
+    }
+  }
+
+  // Smooth scroll for table of contents links
+  document.addEventListener("DOMContentLoaded", function () {
+    const links = document.querySelectorAll('a[href^="#"]');
+
+    links.forEach((link) => {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        const targetId = this.getAttribute("href");
+        if (targetId === "#") return;
+
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}

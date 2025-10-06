@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="bg-gray-50">
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-black to-red-900 text-white py-20">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <h1 class="text-5xl font-extrabold mb-6">About Me</h1>
+      <p class="text-xl text-gray-200 max-w-3xl mx-auto">
+        I am a Django developer and ethical hacker who builds secure, scalable, 
+        and high-performing applications. My curiosity drives me to explore deeply, 
+        and my confidence comes from solving complex problems with clean, 
+        practical solutions.
+      </p>
+    </div>
+  </section>
+
+  <!-- About Me -->
+  <section class="py-16 max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">👨‍💻 Who I Am</h2>
+      <p class="text-gray-700 leading-relaxed mb-4">
+        I am not just a coder—I am a builder. Every project I touch, I approach 
+        with focus, discipline, and creativity. My foundation is in 
+        <span class="font-semibold text-red-700">Python & Django</span>, 
+        but my curiosity has taken me into areas like 
+        <span class="font-semibold text-red-700">security, performance, and scaling systems</span>.
+      </p>
+      <p class="text-gray-700 leading-relaxed">
+        I believe challenges are opportunities. I don’t shy away from 
+        complexity; I thrive in it. That’s why I confidently take on projects 
+        that demand precision, bravery, and vision.
+      </p>
+    </div>
+    <div class="bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-200">
+      <img src="{% static 'images/about-me.jpg' %}" alt="My Work" class="w-full h-64 object-cover">
+    </div>
+  </section>
+
+  <!-- Blog Purpose -->
+  <section class="bg-red-900 text-white py-16">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-6">✍️ Why I Share</h2>
+      <p class="text-lg text-gray-200 leading-relaxed max-w-3xl mx-auto">
+        I write and share my work to show that great solutions are born from 
+        persistence and clarity. My posts document real problems and the paths 
+        I took to solve them. I share not just the successes, but the 
+        thinking process behind them — because I know that’s what builds trust.
+      </p>
+    </div>
+  </section>
+
+  <!-- Topics -->
+  <section class="py-16 max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-gray-900 mb-10 text-center">🚀 What I Do</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white shadow-lg rounded-xl p-6 border-t-4 border-red-700">
+        <h3 class="text-xl font-semibold text-gray-800 mb-3">Django & Python</h3>
+        <p class="text-gray-600">
+          I design and build modern, maintainable, and scalable Django applications. 
+          From APIs to complete platforms, I focus on clean architecture.
+        </p>
+      </div>
+      <div class="bg-white shadow-lg rounded-xl p-6 border-t-4 border-red-700">
+        <h3 class="text-xl font-semibold text-gray-800 mb-3">Security & Ethical Hacking</h3>
+        <p class="text-gray-600">
+          Security is never an afterthought for me. With an ethical hacking background, 
+          I design systems that are not just powerful, but resilient against threats.
+        </p>
+      </div>
+      <div class="bg-white shadow-lg rounded-xl p-6 border-t-4 border-red-700">
+        <h3 class="text-xl font-semibold text-gray-800 mb-3">Problem Solving</h3>
+        <p class="text-gray-600">
+          Every big project comes with challenges. I approach each problem with curiosity 
+          and confidence, turning roadblocks into breakthroughs.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="bg-black text-white py-20">
+    <div class="max-w-4xl mx-auto text-center px-6">
+      <h2 class="text-4xl font-bold mb-6">🤝 Let’s Work Together</h2>
+      <p class="text-lg text-gray-300 mb-8">
+        I am ready for projects that demand skill, creativity, and courage. 
+        If you’re looking for someone who can deliver at the highest level, 
+        you’ve found the right person.
+      </p>
+      <a href="{% url 'contact' %}" 
+         class="bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300">
+        Hire Me
+      </a>
+    </div>
+  </section>
+</div>
+{% endblock %}

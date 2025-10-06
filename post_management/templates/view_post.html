@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blog Posts - BlogPost{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Main Content Layout -->
+    <div class="flex flex-col lg:flex-row gap-8">
+
+      <!-- Posts Section (Left - 75% width) -->
+      <div class="lg:w-3/4">
+        <!-- Page Header -->
+        <div class="mb-8 text-center">
+          <h1 class="text-4xl font-bold text-gray-900 mb-3">Latest Articles</h1>
+          <p class="text-lg text-gray-600">Discover insightful content and stay updated with our latest publications</p>
+        </div>
+
+        <!-- Posts Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {% for post in posts %}
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl border border-gray-200">
+
+            <!-- Featured Image -->
+            <div class="h-48 overflow-hidden">
+              {% if post.image %}
+              <img src="{{ post.image }}" alt="{{ post.title }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+             
+              {% else %}
+              <div class="w-full h-full bg-gray-300 flex items-center justify-center text-xl text-gray-700">
+                No Image
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Post Content -->
+            <div class="p-6">
+              <!-- Category Badge -->
+              {% if post.category %}
+              <div class="inline-block px-3 py-1 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-full text-xs font-semibold mb-3">
+                {{ post.category }}
+              </div>
+              {% endif %}
+
+              <!-- Title -->
+              <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2 hover:text-pink-600 transition-colors duration-300">
+                {{ post.title }}
+
+              </h3>
+
+              <!-- Excerpt -->
+              <p class="text-gray-600 mb-4 line-clamp-3 text-sm leading-relaxed">
+                {% if post.excerpt %}
+                  {{ post.excerpt }}
+                {% else %}
+                  {{ post.body|striptags|truncatewords:20 }}
+                {% endif %}
+              </p>
+
+              <!-- Tags -->
+              {% if post.tags.all %}
+              <div class="mt-2 mb-4">
+                {% for tag in post.tags.all %}
+                  <span class="inline-block px-2 py-1 bg-gray-200 rounded text-xs mr-1">{{ tag.name }}</span>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+              <!-- Author and Date -->
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-orange-500 flex items-center justify-center mr-3 text-white font-bold">
+                    {{ post.created_by.first_name|first|upper }}
+                    
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-900">{{ post.created_by }}</p>
+                    <p class="text-xs text-gray-500">{{ post.created_at|date:"M d, Y" }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Read More Button -->
+              <a href="{% url 'post_details' post.slug %} " class="block w-full text-center py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-lg font-medium hover:from-pink-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105">
+                Read More
+              </a>
+            </div>
+          </div>
+          {% empty %}
+          <!-- Empty State -->
+          <div class="col-span-full text-center py-12">
+            <div class="max-w-md mx-auto">
+              <div class="text-6xl text-gray-300 mb-4">📝</div>
+              <h3 class="text-2xl font-bold text-gray-700 mb-2">No posts yet</h3>
+              <p class="text-gray-500">Check back later for new content!</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="flex justify-center mt-8">
+          <div class="flex space-x-2">
+            {% if page_obj.has_previous %}
+            <a href="#" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition-colors duration-300">
+              ← Previous
+            </a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
+              <span class="px-4 py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-lg font-medium">{{ num }}</span>
+              {% else %}
+              <a href="#" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition-colors duration-300">
+                {{ num }}
+              </a>
+              {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <a href="#" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition-colors duration-300">
+              Next → 
+            </a>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      {% block sidebar %}
+        {% include 'sidebar.html' %}
+      {% endblock %}
+{% endblock %}
+
+

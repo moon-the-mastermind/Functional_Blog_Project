@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="bg-gray-50">
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-black to-red-900 text-white py-20">
+    <div class="max-w-4xl mx-auto text-center px-6">
+      <h1 class="text-5xl font-extrabold mb-4">Contact Me</h1>
+      <p class="text-lg text-gray-200 max-w-2xl mx-auto">
+        Let’s talk about my next big project. I’m always open to new opportunities, 
+        collaborations, or simply sharing ideas.
+      </p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="py-16 max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12">
+    
+    <!-- Contact Form -->
+    <div class="bg-white shadow-xl rounded-2xl p-8 border-t-4 border-red-700">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">📩 Send Me a Message</h2>
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+        
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+          <input type="text" id="name" name="name" required 
+            class="w-full mt-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-700 focus:border-red-700">
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <input type="email" id="email" name="email" required 
+            class="w-full mt-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-700 focus:border-red-700">
+        </div>
+
+        <div>
+          <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+          <textarea id="message" name="message" rows="5" required 
+            class="w-full mt-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-700 focus:border-red-700"></textarea>
+        </div>
+
+        <button type="submit" 
+          class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300">
+          Send Message
+        </button>
+      </form>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="flex flex-col justify-center bg-gradient-to-br from-red-900 to-black text-white rounded-2xl p-8 shadow-xl">
+      <h2 class="text-2xl font-bold mb-6">📞 Get in Touch</h2>
+      <p class="text-gray-200 mb-6">
+        I’m available for freelance work, collaborations, or full-time roles. 
+        Reach out and let’s make something impactful together.
+      </p>
+
+      <ul class="space-y-4">
+        <li class="flex items-center">
+          <span class="w-10 h-10 flex items-center justify-center bg-red-700 rounded-full mr-4">📧</span>
+          <span class="text-gray-200">myemail@example.com</span>
+        </li>
+        <li class="flex items-center">
+          <span class="w-10 h-10 flex items-center justify-center bg-red-700 rounded-full mr-4">📱</span>
+          <span class="text-gray-200">+880 123 456 789</span>
+        </li>
+        <li class="flex items-center">
+          <span class="w-10 h-10 flex items-center justify-center bg-red-700 rounded-full mr-4">🌍</span>
+          <span class="text-gray-200">My City, Country</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="py-16 max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">💻 My Skills</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white shadow-xl rounded-2xl p-6 text-center">
+        <h3 class="text-xl font-semibold mb-2">Python & Django</h3>
+        <p class="text-gray-700">I build scalable, secure, and efficient web applications with Django.</p>
+      </div>
+      <div class="bg-white shadow-xl rounded-2xl p-6 text-center">
+        <h3 class="text-xl font-semibold mb-2">Frontend (React & Tailwind)</h3>
+        <p class="text-gray-700">I craft modern, responsive, and stylish user interfaces for web projects.</p>
+      </div>
+      <div class="bg-white shadow-xl rounded-2xl p-6 text-center">
+        <h3 class="text-xl font-semibold mb-2">Security & Ethical Hacking</h3>
+        <p class="text-gray-700">I analyze systems for vulnerabilities and implement secure coding practices.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section class="py-16 max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">🚀 Recent Projects</h2>
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="bg-white shadow-xl rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-2">Cricket Tournament Platform</h3>
+        <p class="text-gray-700">A full-stack Django & React application with live scoring, notifications, and leaderboard system.</p>
+      </div>
+      <div class="bg-white shadow-xl rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-2">Deface Webpage Redesign</h3>
+        <p class="text-gray-700">Cleaned and modernized an unprofessional HTML/CSS website for better UI/UX.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="py-16 max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">💬 Testimonials</h2>
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="bg-gradient-to-r from-black to-red-900 text-white rounded-2xl p-6 shadow-xl">
+        <p>“Working with me is always productive. I bring creativity, expertise, and a fearless approach to big projects.”</p>
+        <p class="mt-4 font-semibold">— Me, Myself</p>
+      </div>
+      <div class="bg-gradient-to-r from-black to-red-900 text-white rounded-2xl p-6 shadow-xl">
+        <p>“I take ownership of projects, ensuring they are delivered on time with high quality and style.”</p>
+        <p class="mt-4 font-semibold">— Me, Myself</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Links Section -->
+  <section class="py-16 max-w-6xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold text-gray-900 mb-8">🌐 Follow Me</h2>
+    <div class="flex justify-center space-x-6">
+      <a href="https://www.facebook.com/sakib.hasan.moon.2024/" class="text-2xl text-red-700 hover:text-red-800 transition duration-300"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://www.instagram.com/moon_sakib639/" class="text-2xl text-red-700 hover:text-red-800 transition duration-300"><i class="fab fa-instagram fa-f"></i></a>
+      <a href="https://x.com/moonsakib639" class="text-2xl text-red-700 hover:text-red-800 transition duration-300"><i class="fab fa-twitter"></i></a>
+      <a href="https://github.com/moon-the-mastermind" class="text-2xl text-red-700 hover:text-red-800 transition duration-300"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/moon-sakib/" class="text-2xl text-red-700 hover:text-red-800 transition duration-300"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

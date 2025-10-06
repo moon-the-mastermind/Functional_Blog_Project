@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
+
+    <h2 class="text-2xl font-bold mb-6">Edit Profile</h2>
+
+    <!-- User Form -->
+    <form id="profileForm" method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+
+        <h3 class="text-lg font-semibold">Account Info</h3>
+        {{ user_form.as_p }}
+
+        <h3 class="text-lg font-semibold mt-4">Profile Info</h3>
+        {{ profile_form.as_p }}
+
+        <button type="submit" class="bg-pink-600 text-white px-6 py-2 rounded hover:bg-pink-700">
+            Save Changes
+        </button>
+    </form>
+
+    <!-- Feedback -->
+    <div id="feedback" class="mt-4 text-green-600 font-medium"></div>
+
+</div>
+
+<!-- Optional: Ajax submission for dynamic behavior -->
+<script>
+document.getElementById('profileForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
+
+    fetch("", {
+        method: "POST",
+        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.message){
+            document.getElementById('feedback').textContent = data.message;
+        } else {
+            document.getElementById('feedback').textContent = "Errors occurred!";
+            console.log("User Errors:", data["user-error"]);
+            console.log("Profile Errors:", data["profile-error"]);
+        }
+    })
+    .catch(err => console.error(err));
+});
+</script>
+
+{% endblock %}

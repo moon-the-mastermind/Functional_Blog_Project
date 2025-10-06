@@ -1,0 +1,62 @@
+<div class="lg:w-1/4 flex-shrink-0">
+  <div class="sticky top-6 space-y-6">
+    <!-- Categories Section -->
+<div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+  <h3 class="text-xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">
+    Categories
+  </h3>
+  <!-- Scrollable container -->
+  <div class="space-y-3 max-h-64 overflow-y-auto">
+    {% for category in categories %}
+    <a href="{% url 'category_filter' category.slug %}"
+       class="flex items-center justify-between group p-2 rounded-lg hover:bg-gray-50 transition-colors duration-300">
+      <span class="text-gray-700 group-hover:text-pink-600 font-medium">{{ category.name }}</span>
+      <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs font-medium group-hover:bg-pink-100 group-hover:text-pink-600">
+        {{ category.post_count }}
+      </span>
+    </a>
+    {% empty %}
+    <p class="text-gray-500 text-sm">No categories available</p>
+    {% endfor %}
+  </div>
+</div>
+
+    <!-- Popular Posts Section -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+      <h3 class="text-xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">Popular Posts</h3>
+      <div class="space-y-4">
+        {% for post in popular_post %}
+        <a href="{% url 'post_details' post.slug %}" class="block group">
+          <div class="flex items-start space-x-3">
+            <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-pink-500 to-orange-500 rounded-lg flex items-center justify-center text-white font-bold">
+              {{ post.title|first|upper }}
+            </div>
+            <div>
+              <h4 class="font-medium text-gray-900 group-hover:text-pink-600 line-clamp-2 text-sm leading-tight">
+                {{ post.title }}
+              </h4>
+              <p class="text-xs text-gray-500 mt-1">{{ post.created_at|date:"M d, Y" }}</p>
+            </div>
+          </div>
+        </a>
+        {% empty %}
+        <p class="text-gray-500 text-sm">No popular posts available</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="bg-gradient-to-br from-pink-500 to-orange-500 rounded-2xl shadow-lg p-6 text-white">
+      <h3 class="text-xl font-bold mb-2">Stay Updated</h3>
+      <p class="text-pink-100 text-sm mb-4">Subscribe to our newsletter for the latest posts</p>
+      <form class="space-y-3">
+        <input type="email" placeholder="Your email address"
+               class="w-full px-4 py-2 rounded-lg bg-white/20 placeholder-pink-200 text-white border border-white/30 focus:outline-none focus:border-white"/>
+        <button type="submit"
+                class="w-full bg-white text-pink-600 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300">
+          Subscribe
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

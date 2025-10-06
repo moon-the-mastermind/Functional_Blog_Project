@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Login | BlogPost{% endblock %}
+
+{% block content %}
+<!-- Center the login form only -->
+<div class="flex items-center justify-center min-h-screen px-4">
+  <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-10">
+    <h2 class="text-3xl font-bold text-center mb-8 flex items-center justify-center gap-2">
+      Login
+      <!-- Login SVG Icon -->
+      <img src="https://cdn-icons-png.flaticon.com/512/5509/5509636.png" 
+       alt="Login Icon" 
+       class="h-7 w-7">
+    </h2>
+
+    {% if messages %}
+      <div class="mb-4">
+        {% for message in messages %}
+          <p class="text-red-500 text-sm">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for field in form %}
+          <div>
+            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+              {{ field.label }}
+            </label>
+            {{ field }}
+            {% if field.errors %}
+              {% for error in field.errors %}
+                <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+              {% endfor %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <button type="submit" class="w-full mt-8 py-3 px-4 rounded-lg text-white font-semibold bg-gradient-to-r from-pink-500 via-red-500 to-green-500 hover:opacity-90 transition">
+        Login
+      </button>
+    </form>
+
+    <p class="text-sm text-gray-600 text-center mt-6">
+      Don't have an account? 
+      <a href="{% url 'user_signup' %}" class="text-pink-600 hover:underline">Sign up here</a>
+    </p>
+  </div>
+</div>
+
+<style>
+  input, select, textarea {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500;
+  }
+</style>
+{% endblock %}

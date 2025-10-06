@@ -1,0 +1,194 @@
+{% extends "base.html" %} 
+
+{% block title %}Profile | BlogPost{% endblock %}
+
+{% block content %}
+
+<div class="flex justify-center w-full px-4 py-12">
+    <!-- Profile Box -->
+    <div class="w-full max-w-5xl bg-white rounded-2xl shadow-xl p-10 border border-gray-100">
+        <div class="flex flex-col items-center">
+            <!-- Profile Photo -->
+            <div class="relative">
+                {% if profile.photo %}
+                <img src="{{ profile.photo.url }}" alt="Profile Photo"
+                     class="w-36 h-36 rounded-full object-cover border-4 border-pink-500 shadow-md">
+                {% else %}
+                <div class="w-36 h-36 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center
+                            text-gray-500 text-2xl font-semibold border-4 border-pink-500 shadow-md">
+                    {{ profile_user.username|slice:":1"|upper }}
+                </div>
+                {% endif %}
+                {% if request.user == profile_user %}
+                <a href="#" class="absolute bottom-2 right-2 bg-pink-500 text-white p-2 rounded-full shadow-md hover:bg-pink-600 transition-all">
+                    <i class="fas fa-camera text-xs"></i>
+                </a>
+                {% endif %}
+            </div>
+
+            <!-- Name + Username -->
+            <div class="mt-6 text-center">
+                <h2 class="text-3xl font-bold text-gray-800">
+                    {{ profile_user.first_name }} {{ profile_user.last_name }}
+                </h2>
+                <p class="text-gray-500 mt-1">@{{ profile_user.username }}</p>
+
+                <!-- Bio Section -->
+                <div class="mt-4 max-w-2xl mx-auto">
+                    {% if profile.bio %}
+                        <p class="text-gray-600 text-center bg-gray-50 p-4 rounded-lg border border-gray-100">{{ profile.bio }}</p>
+                    {% else %}
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-100 text-center">
+                            <i class="fas fa-quote-left text-pink-400 text-sm"></i>
+                            <span class="text-gray-500 italic">No bio yet. Share something about yourself!</span>
+                            <i class="fas fa-quote-right text-pink-400 text-sm"></i>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="flex justify-center space-x-8 mt-6 py-4 border-y border-gray-100 w-full max-w-md">
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-pink-500">{{ user_posts|length }}</p>
+                    <p class="text-xs text-gray-500">POSTS</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-pink-500">0</p>
+                    <p class="text-xs text-gray-500">FOLLOWERS</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-pink-500">0</p>
+                    <p class="text-xs text-gray-500">FOLLOWING</p>
+                </div>
+            </div>
+
+            <!-- Social Links -->
+            <div class="flex space-x-6 mt-6">
+                {% if profile.facebook_link %}
+                <a href="{{ profile.facebook_link }}" target="_blank" 
+                   class="bg-blue-50 text-blue-600 p-3 rounded-full hover:bg-blue-100 transition-colors">
+                    <i class="fab fa-facebook-f fa-lg"></i>
+                </a>
+                {% endif %}
+                {% if profile.insta_link %}
+                <a href="{{ profile.insta_link }}" target="_blank" 
+                   class="bg-pink-50 text-pink-600 p-3 rounded-full hover:bg-pink-100 transition-colors">
+                    <i class="fab fa-instagram fa-lg"></i>
+                </a>
+                {% endif %}
+                {% if profile.twitter_link %}
+                <a href="{{ profile.twitter_link }}" target="_blank" 
+                   class="bg-blue-50 text-blue-400 p-3 rounded-full hover:bg-blue-100 transition-colors">
+                    <i class="fab fa-twitter fa-lg"></i>
+                </a>
+                {% endif %}
+                {% if not profile.facebook_link and not profile.insta_link and not profile.twitter_link %}
+                <div class="text-center text-gray-400">
+                    <i class="fas fa-share-alt text-2xl mb-1"></i>
+                    <p class="text-xs">No social links</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Contact Info -->
+            <div class="mt-6 text-gray-700 text-sm space-y-3 text-center">
+                <div class="flex items-center justify-center space-x-2">
+                    <i class="fas fa-envelope text-pink-500"></i>
+                    <p>Email: <span class="text-gray-600">{{ profile_user.email }}</span></p>
+                </div>
+                {% if profile_user.phone %}
+                <div class="flex items-center justify-center space-x-2">
+                    <i class="fas fa-phone text-pink-500"></i>
+                    <p>Phone: <span class="text-gray-600">{{ profile_user.phone }}</span></p>
+                </div>
+                {% endif %}
+                {% if profile.address %}
+                <div class="flex items-center justify-center space-x-2">
+                    <i class="fas fa-map-marker-alt text-pink-500"></i>
+                    <p>Address: <span class="text-gray-600">{{ profile.address }}</span></p>
+                </div>
+                {% endif %}
+                <div class="flex items-center justify-center space-x-2 text-gray-500">
+                    <i class="fas fa-calendar-alt"></i>
+                    <p class="text-xs">Joined: {{ profile_user.date_joined|date:"F j, Y" }}</p>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="mt-8 flex space-x-4">
+                {% if request.user == profile_user %}
+                    <a href="{% url 'edit_profile' %}"
+                        class="border border-pink-500 text-pink-500 hover:bg-pink-50 font-semibold py-2 px-6 rounded-full transition duration-300 flex items-center">
+                        <i class="fas fa-edit mr-1"></i> Edit
+                    </a>
+                {% endif %}
+                <a href="#" class="border border-pink-500 text-pink-500 hover:bg-pink-50 font-semibold py-2 px-6 rounded-full transition duration-300 flex items-center">
+                    <i class="fas fa-share-alt mr-2"></i> Share Profile
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Posts -->
+<div class="w-full max-w-[1600px] mx-auto px-4 lg:px-0 py-12">
+    <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-semibold text-gray-800 flex items-center">
+            <i class="fas fa-file-alt text-pink-500 mr-2"></i> Posts by {{ profile_user.first_name }}
+        </h3>
+        {% if request.user == profile_user %}
+        <a href="{% url 'create_post' %}" class="text-pink-500 text-sm hover:underline flex items-center">
+            <i class="fas fa-plus mr-1"></i> Create New Post
+        </a>
+        {% endif %}
+    </div>
+    
+    {% if user_posts %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        {% for post in user_posts %}
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-transform duration-300 hover:-translate-y-1">
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-40 object-cover">
+            {% else %}
+            <div class="w-full h-40 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-400">
+                <i class="fas fa-image text-3xl"></i>
+            </div>
+            {% endif %}
+            <div class="p-4">
+                <h4 class="text-sm font-semibold text-gray-800 truncate">{{ post.title }}</h4>
+                <p class="text-xs text-gray-600 mt-2 line-clamp-3">{{ post.content|truncatewords:20 }}</p>
+                <div class="flex justify-between items-center mt-4">
+                    <span class="text-xs text-gray-500">{{ post.created_at|date:"M j, Y" }}</span>
+
+                    <a href="{% url 'edit_post' post.slug %}" class="text-green-500 text-xs hover:underline flex items-center">
+                         <i class="fas fa-edit mr-2"></i>
+                         Edit
+                    </a>
+                    <a href="{% url 'delete_post' post.slug %}" class="text-red-500 text-xs hover:underline flex items-center">
+                         <i class="fas fa-trash mr-2"></i>
+                         Delete
+                    </a>
+
+                    <a href="{% url 'post_details' post.slug %}" class="text-pink-500 text-xs hover:underline flex items-center">
+                        Read more <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-12 bg-gray-50 rounded-2xl border border-gray-100">
+        <i class="fas fa-feather-alt text-4xl text-gray-300 mb-4"></i>
+        <p class="text-gray-500">No posts yet. Share your thoughts with the world!</p>
+        {% if request.user == profile_user %}
+        <a href="{% url 'create_post' %}" class="inline-block mt-4 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300">
+            Create Your First Post
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
