@@ -1,10 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Blog Post{% endblock %}</title>
+    <title>{% block title %} SpeakFree {% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="{% static 'images/speakfree_fav.png' %}" type="image/x-icon">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -54,7 +56,7 @@
         class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center text-white text-shadow"
       >
         <div class="flex items-center space-x-4">
-          <div class="text-xl font-bold">BlogPost</div>
+          <div class="text-xl font-bold">SpeakFree</div>
           <ul class="hidden md:flex space-x-6">
             <li><a href="{% url 'home' %}" class="hover:opacity-80">Home</a></li>
             <li><a href="{% url 'create_post' %}" class="hover:opacity-80">Create</a></li>

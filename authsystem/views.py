@@ -31,8 +31,8 @@ def home(request):
     context = {
         "posts" : posts,
         "user_post" : user_post,
-        "categories" : categoryinfo,
-        "popular_post" : popular_post,
+        "categories" : categoryinfo
+
 
     }
     return render(request, "home.html", context)
