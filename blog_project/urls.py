@@ -3,8 +3,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from authsystem.views import home
+from authsystem.views import home, run_migrations
 urlpatterns = [
+    path('run-migrations/', run_migrations, name='run_migrations'),
     path("", home, name= "home"),
     path('admin/', admin.site.urls),
     path("user/", include("authsystem.urls")),
