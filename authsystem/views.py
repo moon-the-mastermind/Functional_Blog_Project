@@ -90,8 +90,8 @@ def view_profile(request, pk):
     get_profile_data = UserProfile.objects.select_related("user")
     user_obj = get_object_or_404(CustomUser, id=pk)
     
-    # 404 error fix করার জন্য get_or_create ব্যবহার করা হয়েছে
-    user_profile, created = UserProfile.objects.get_or_create(user=user_obj)
+    # 404 fix: profile না থাকলেও auto-create হবে
+    user_profile, _ = UserProfile.objects.get_or_create(user=user_obj)
 
     user_data = []
     for data in get_profile_data:
