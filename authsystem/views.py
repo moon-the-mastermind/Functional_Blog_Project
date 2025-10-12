@@ -49,7 +49,7 @@ def user_signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return JsonResponse({"message" : "success"})
+            return redirect("home")
         else:
             return JsonResponse({"alert" : form.errors})
     else:
