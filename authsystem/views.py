@@ -12,28 +12,27 @@ def home(request):
     # featured projects
     posts = Post.objects.all().order_by("-created_at")[:6]
 
-    user_obj = request.user
-    user_post = Post.objects.filter(created_by = user_obj).order_by("-created_at")
-    print(request.user)
+    if request.user.is_authenticated:
+        user_obj = request.user
+        user_post = Post.objects.filter(created_by=user_obj).order_by("-created_at")
+    else:
+        user_obj = None
+        user_post = Post.objects.none()  # Empty queryset
+
     categorylist= Category.objects.annotate(post_count = Count("posts"))
     categoryinfo = []
     for category in categorylist:
-        categoryinfo.append(
+        categoryinfo.append({
+            "id": category.id,
+            "name": category.name,
+            "slug": category.slug,
+            "post_count": category.post_count,
+        })
 
-            {   "id" : category.id,
-                "name" : category.name,
-                "slug" : category.slug,
-                "post_count" : category.post_count,
-            }
-        )
-
-    # user all posts
     context = {
-        "posts" : posts,
-        "user_post" : user_post,
-        "categories" : categoryinfo
-
-
+        "posts": posts,
+        "user_post": user_post,
+        "categories": categoryinfo
     }
     return render(request, "home.html", context)
 
