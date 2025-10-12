@@ -85,9 +85,16 @@ def user_logout(request):
 
 @login_required
 def view_profile(request, pk):
+    
 
     get_profile_data = UserProfile.objects.select_related("user")
     user_obj = get_object_or_404(CustomUser, id = pk )
+
+    try:
+        user_profile = UserProfile.objects.get(user=user_obj)
+    except UserProfile.DoesNotExist:
+        user_profile = None
+        
     user_profile = get_object_or_404(UserProfile, user = user_obj)
 
     user_data= []
