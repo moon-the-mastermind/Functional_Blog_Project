@@ -88,26 +88,29 @@ def view_profile(request, pk):
     
 
     get_profile_data = UserProfile.objects.select_related("user")
-    user_obj = get_object_or_404(CustomUser, id = pk )
-
-    try:
-        user_profile = UserProfile.objects.get(user=user_obj)
-    except UserProfile.DoesNotExist:
-        user_profile = None
-        
-    user_profile = get_object_or_404(UserProfile, user = user_obj)
-
-    user_data= []
+    user_obj = get_object_or_404(CustomUser, id=pk)
     
+    # 404 error fix করার জন্য get_or_create ব্যবহার করা হয়েছে
+    user_profile, created = UserProfile.objects.get_or_create(user=user_obj)
+
+    user_data = []
     for data in get_profile_data:
         user_data.append({
-            "user" : data.user,
+            "user": data.user,
         })
     
-    user_post = Post.objects.filter(created_by = user_obj).order_by("-created_at")
+    user_post = Post.objects.filter(created_by=user_obj).order_by("-created_at")
 
-
-    return render(request, "view_profile.html", {"user_data": user_data, "profile_user" : user_obj, "profile" : user_profile, "user_posts" : user_post})
+    return render(
+        request,
+        "view_profile.html",
+        {
+            "user_data": user_data,
+            "profile_user": user_obj,
+            "profile": user_profile,
+            "user_posts": user_post
+        }
+    )
 
 @login_required
 def edit_profile(request):
