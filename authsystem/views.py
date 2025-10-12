@@ -1,11 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from . forms import SignUpForm, LoginForm, UserInProfile, ProfileForm
 from . models import CustomUser, UserProfile
 from post_management.models import Post, Category
 from django.db.models import Count
+from django.core.management import call_command
+
+
+def run_migrations(request):
+    call_command('migrate')
+    return HttpResponse("Migration applied")
 
 def home(request):
 

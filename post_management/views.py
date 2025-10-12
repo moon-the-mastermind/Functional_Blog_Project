@@ -50,54 +50,41 @@ def create_post(request):
 
 
 def view_post(request):
-    posts = (
-        models.Post.objects
-        .select_related("created_by", "category")
-        .prefetch_related("tags")
-        .all()
-        .order_by("-created_at")
-    )
 
+    posts = models.Post.objects.select_related("created_by", "category").prefetch_related("tags").all().order_by("-created_by")
     post_data = []
     for post in posts:
-        post_data.append({
-            "title": post.title,
-            "body": post.body,
-            "image": post.image.url if post.image else None,
-            "slug": post.slug,
-            "created_by": post.created_by.first_name if post.created_by else "Unknown",
-            "category": post.category.name if post.category else None,
-            "tags": [tag.name for tag in post.tags.all()],
-            "created_at": post.created_at,
-            "updated_at": post.updated_at,
-            "views": post.views
-        })
+        post_data.append(
+            {
+                "title" : post.title,
+                "body" : post.body,
+                "image" : post.image.url if post.image else None,
+                "slug" : post.slug,
+                "created_by" : post.created_by.first_name,
+                "category" : post.category.name if post.category else None,
+                "tags" : [tag.name for tag in post.tags.all()], 
+                "created_at" : post.created_at,
+                "updated_at" : post.updated_at,
+                "views" : post.views
+            }
+        )
+    popular_post = models.Post.objects.order_by("-views")[:3]
+        
+    # category view section
 
-    popular_post = (
-        models.Post.objects
-        .select_related("created_by", "category")
-        .prefetch_related("tags")
-        .order_by("-views")[:3]
-    )
+    categorylist= models.Category.objects.annotate(post_count = Count("posts"))
+    categoryinfo = []
+    for category in categorylist:
+        categoryinfo.append(
 
-    categorylist = models.Category.objects.annotate(post_count=Count("posts"))
-    categoryinfo = [
-        {
-            "id": category.id,
-            "name": category.name,
-            "slug": category.slug,
-            "post_count": category.post_count,
-        }
-        for category in categorylist
-    ]
+            {   "id" : category.id,
+                "name" : category.name,
+                "slug" : category.slug,
+                "post_count" : category.post_count,
+            }
+        )
 
-    context = {
-        "posts": post_data,
-        "categories": categoryinfo,
-        "popular_post": popular_post
-    }
-
-    return render(request, "view_post.html", context)
+    return render(request, "view_post.html", {"posts" : post_data, "categories" : categoryinfo, "popular_post" : popular_post})
 
 @login_required
 def post_details(request, slug):
