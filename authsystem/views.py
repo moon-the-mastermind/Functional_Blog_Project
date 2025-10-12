@@ -10,6 +10,7 @@ from django.core.management import call_command
 
 
 def run_migrations(request):
+    call_command('makemigrations')
     call_command('migrate')
     return JsonResponse({"alert" : "success"})
 
