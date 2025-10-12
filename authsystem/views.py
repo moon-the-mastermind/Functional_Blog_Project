@@ -11,7 +11,7 @@ from django.core.management import call_command
 
 def run_migrations(request):
     call_command('migrate')
-    return HttpResponse("Migration applied")
+    return JsonResponse({"alert" : "success"})
 
 def home(request):
 
