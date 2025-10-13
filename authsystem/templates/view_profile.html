@@ -161,7 +161,7 @@
                 <div class="flex justify-between items-center mt-4">
                     <span class="text-xs text-gray-500">{{ post.created_at|date:"M j, Y" }}</span>
                     {% for post in user_posts %}
-                        {% if request.user == post.created_by %}
+                        {% if request.user.is_authenticated and request.user == post.created_by %}
                         <a href="{% url 'edit_post' post.slug %}" class="text-green-500 text-xs hover:underline flex items-center">
                             <i class="fas fa-edit mr-2"></i>
                             Edit
