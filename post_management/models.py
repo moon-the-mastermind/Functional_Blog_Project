@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
-
+from .utils import generate_slug
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -48,7 +48,7 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            base_slug = slugify(self.title)
+            base_slug = generate_slug(self.title) or "post"
             slug = base_slug
             num = 1
             while Post.objects.filter(slug=slug).exists():
