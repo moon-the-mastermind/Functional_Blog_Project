@@ -84,15 +84,14 @@ def user_logout(request):
     logout(request)
     return redirect("user_login")
 
+
 @login_required
 def view_profile(request, pk):
     
 
     get_profile_data = UserProfile.objects.select_related("user")
     user_obj = get_object_or_404(CustomUser, id=pk)
-    
-    # 404 fix: profile না থাকলেও auto-create হবে
-    user_profile, _ = UserProfile.objects.get_or_create(user=user_obj)
+    user_profile, created = UserProfile.objects.get_or_create(user=user_obj)
 
     user_data = []
     for data in get_profile_data:
@@ -101,6 +100,7 @@ def view_profile(request, pk):
         })
     
     user_post = Post.objects.filter(created_by=user_obj).order_by("-created_at")
+    print(user_profile)
 
     return render(
         request,
@@ -108,8 +108,8 @@ def view_profile(request, pk):
         {
             "user_data": user_data,
             "profile_user": user_obj,
-            "profile": user_profile,
-            "user_posts": user_post
+            "user_posts": user_post,
+            "profile" : user_profile,
         }
     )
 
