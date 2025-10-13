@@ -161,6 +161,7 @@
                 <div class="flex justify-between items-center mt-4">
                     <span class="text-xs text-gray-500">{{ post.created_at|date:"M j, Y" }}</span>
 
+                    {% if request.user == profile.user %}
                     <a href="{% url 'edit_post' post.slug %}" class="text-green-500 text-xs hover:underline flex items-center">
                          <i class="fas fa-edit mr-2"></i>
                          Edit
@@ -169,6 +170,7 @@
                          <i class="fas fa-trash mr-2"></i>
                          Delete
                     </a>
+                    {% endif %}
 
                     <a href="{% url 'post_details' post.slug %}" class="text-pink-500 text-xs hover:underline flex items-center">
                         Read more <i class="fas fa-arrow-right ml-1 text-xs"></i>
