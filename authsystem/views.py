@@ -100,7 +100,7 @@ def view_profile(request, pk):
         })
     
     user_post = Post.objects.filter(created_by=user_obj).order_by("-created_at")
-    print(user_profile)
+    print(user_post)
 
     return render(
         request,
